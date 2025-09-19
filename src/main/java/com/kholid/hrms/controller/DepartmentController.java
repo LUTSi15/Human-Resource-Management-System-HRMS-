@@ -80,7 +80,8 @@ public class DepartmentController {
             if (manager != null) {
                 // Check if any other department already has this manager
                 Department existingDept = departmentRepository.findByManager(manager);
-                if (existingDept != null) {
+                Department prevDepartment = departmentRepository.findById(department.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid department Id:" + department.getId()));;
+                if (existingDept != null && existingDept != prevDepartment) {
                     // Manager already assigned to another department
                     model.addAttribute("errorMessage", "This manager is already assigned to another department!");
 
@@ -88,7 +89,6 @@ public class DepartmentController {
                     model.addAttribute("users", userRepository.findAll());
 
                     // reload department for form
-                    Department prevDepartment = departmentRepository.findById(department.getId()).orElseThrow(() -> new IllegalArgumentException("Invalid department Id:" + department.getId()));;
                     model.addAttribute("department", prevDepartment);
 
                     return "departments/edit"; // return back to edit page
