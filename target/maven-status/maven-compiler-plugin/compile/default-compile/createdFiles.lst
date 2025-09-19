@@ -1,7 +1,0 @@
-com/kholid/hrms/model/LeaveApplication.class
-com/kholid/hrms/model/Department.class
-com/kholid/hrms/repo/LeaveRepository.class
-com/kholid/hrms/HrmsApplication.class
-com/kholid/hrms/repo/UserRepository.class
-com/kholid/hrms/model/User.class
-com/kholid/hrms/repo/DepartmentRepository.class
