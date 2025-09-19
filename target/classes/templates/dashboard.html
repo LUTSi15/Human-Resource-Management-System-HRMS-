@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+</head>
+<body>
+    <h2>Welcome, <span th:text="${username}"></span>!</h2>
+
+    <p>Your roles:</p>
+    <ul>
+        <li th:text="${role}"></li>
+    </ul>
+
+    <hr>
+
+    <!-- Role-specific links -->
+    <div th:if="${ role eq 'ROLE_ADMIN'}">
+        <a th:href="@{/departments}">Department Maintenance</a><br>
+        <a th:href="@{/users}">User Maintenance</a><br>
+    </div>
+
+    <div th:if="${ role eq 'ROLE_EMPLOYEE'}">
+        <a th:href="@{/leave/apply}">Apply for Leave</a><br>
+        <a th:href="@{/leave/list}">View My Leave Applications</a><br>
+    </div>
+
+    <div th:if="${ role eq 'ROLE_MANAGER'}">
+        <a th:href="@{/leave/list}">View Department Leave Applications</a><br>
+    </div>
+
+    <hr>
+
+    <!-- Logout button -->
+    <form th:action="@{/logout}" method="post">
+        <button type="submit">Logout</button>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+    </form>
+</body>
+</html>

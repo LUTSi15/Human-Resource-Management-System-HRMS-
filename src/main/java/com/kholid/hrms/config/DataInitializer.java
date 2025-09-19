@@ -28,7 +28,7 @@ public class DataInitializer {
                 // 2. Create Admin User
                 User admin = new User();
                 admin.setUsername("Admin");
-                admin.setPassword("{noop}admin123"); // {noop} means plain text, for testing only
+                admin.setPassword("admin123"); // {noop} means plain text, for testing only
                 admin.setRole("ROLE_ADMIN");
                 admin.setDepartment(hrDept); // assign department
                 userRepository.save(admin);

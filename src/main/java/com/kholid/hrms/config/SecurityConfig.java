@@ -54,13 +54,13 @@ public class SecurityConfig {
                 // Any other request needs login
                 .anyRequest().authenticated()
             )
-            // .formLogin(form -> form
-            //     .loginPage("/login")
-            //     .defaultSuccessUrl("/dashboard", true)
-            //     .failureUrl("/login?error=true")
-            //     .permitAll()
-            // )
-            .formLogin(Customizer.withDefaults()) 
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/dashboard", true)
+                .failureUrl("/login?error=true")
+                .permitAll()
+            )
+            // .formLogin(Customizer.withDefaults()) 
             .logout(logout -> logout
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout=true")
