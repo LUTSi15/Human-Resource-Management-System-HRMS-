@@ -35,6 +35,7 @@ public class DepartmentController {
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("department", new Department());
+        model.addAttribute("users", userRepository.findAll());
         return "departments/add";
     }
 
@@ -42,20 +43,38 @@ public class DepartmentController {
     @PostMapping("/add")
     public String saveDepartment(
             @ModelAttribute Department department,
-            @RequestParam(required = false) Long managerId) {
+            @RequestParam(required = false) Long managerId,
+            Model model) {
             
         if (managerId != null) {
             // fetch existing manager from DB
             User manager = userRepository.findById(managerId).orElse(null);
-            department.setManager(manager); // may still be null if id not found
+            department.setManager(manager); // assign manager (may be null if not found)
+        
+            if (manager != null) {
+                // Check if any other department already has this manager
+                Department existingDept = departmentRepository.findByManager(manager);
+                if (existingDept != null) {
+                    // Manager already assigned to another department
+                    model.addAttribute("errorMessage", "This manager is already assigned to another department!");
+                
+                    // reload users list for the dropdown
+                    model.addAttribute("users", userRepository.findAll());
+                
+                    // reload department for form
+                    model.addAttribute("department", department);
+                
+                    return "departments/add"; // return back to add page
+                }
+            }
         } else {
-            department.setManager(null); // explicitly set manager null
+            department.setManager(null); // explicitly null
         }
     
+        // save department if no errors
         departmentRepository.save(department);
         return "redirect:/departments";
     }
-
 
     // Show form to edit department
     @GetMapping("/edit/{id}")
