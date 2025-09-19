@@ -22,7 +22,7 @@ public class Department {
 
     // Manager is a User
     @OneToOne
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "manager_id", nullable = true)
     private User manager;
 
     // getters & setters
