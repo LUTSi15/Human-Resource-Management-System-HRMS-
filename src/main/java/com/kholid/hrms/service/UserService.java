@@ -2,6 +2,8 @@ package com.kholid.hrms.service;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.kholid.hrms.model.Department;
@@ -40,5 +42,15 @@ public class UserService {
         }
         userRepository.deleteById(id);
         return null;
+    }
+
+    public String getCurrentUsername() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName(); // returns username
+    }
+
+    public User getCurrentUser() {
+        String username = getCurrentUsername();
+        return userRepository.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("Invalid user username:" + username));
     }
 }

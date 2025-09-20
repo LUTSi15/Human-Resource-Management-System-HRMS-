@@ -43,10 +43,10 @@ public class SecurityConfig {
                 .requestMatchers("/users/**").hasAuthority("ROLE_ADMIN")
 
                 // Employee pages
-                .requestMatchers("/leave/apply").hasAuthority("ROLE_EMPLOYEE")
+                .requestMatchers("/leaves/apply").hasAuthority("ROLE_EMPLOYEE")
 
                 // Shared pages (Employee + Manager)
-                .requestMatchers("/leave/list").hasAnyAuthority("ROLE_EMPLOYEE", "ROLE_MANAGER")
+                .requestMatchers("/leaves").hasAnyAuthority("ROLE_EMPLOYEE", "ROLE_MANAGER")
 
                 // Dashboard accessible by all logged-in users
                 .requestMatchers("/dashboard").authenticated()

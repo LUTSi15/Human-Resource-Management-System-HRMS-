@@ -21,8 +21,8 @@
     </div>
 
     <div th:if="${ role eq 'ROLE_EMPLOYEE'}">
-        <a th:href="@{/leave/apply}">Apply for Leave</a><br>
-        <a th:href="@{/leave/list}">View My Leave Applications</a><br>
+        <a th:href="@{/leaves/form}">Apply for Leave</a><br>
+        <a th:href="@{/leaves}">View My Leave Applications</a><br>
     </div>
 
     <div th:if="${ role eq 'ROLE_MANAGER'}">
