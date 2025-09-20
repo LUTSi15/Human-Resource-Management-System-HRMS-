@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
@@ -19,12 +20,15 @@ public class User {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @NotBlank(message = "Username is required")
     private String username;
 
     @Column(nullable = false)
+    @NotBlank(message = "Password is required")
     private String password;
 
     @Column(nullable = false)
+    @NotBlank(message = "Role is required")
     private String role; // ROLE_ADMIN, ROLE_MANAGER, ROLE_EMPLOYEE
 
     // Many users can belong to one department
