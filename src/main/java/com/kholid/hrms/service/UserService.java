@@ -4,16 +4,20 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.kholid.hrms.model.Department;
 import com.kholid.hrms.model.User;
+import com.kholid.hrms.repo.DepartmentRepository;
 import com.kholid.hrms.repo.UserRepository;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
+    private final DepartmentRepository departmentRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository,DepartmentRepository departmentRepository) {
         this.userRepository = userRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     public List<User> getAllUsers() {
@@ -28,7 +32,13 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void deleteUser(Long id) {
+    public String deleteUser(Long id) {
+        User user = getUser(id);
+        Department userDepartment = departmentRepository.findByManager(user);
+        if (userDepartment != null) {
+            return "User cant be delete cause he manager for department"+ userDepartment.getName() +"!";
+        }
         userRepository.deleteById(id);
+        return null;
     }
 }

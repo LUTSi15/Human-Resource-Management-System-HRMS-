@@ -76,9 +76,4 @@ public class DepartmentService {
     public void deleteDepartment(Long id) {
         departmentRepository.deleteById(id);
     }
-
-    // List all users for dropdown
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
 }

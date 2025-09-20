@@ -1,6 +1,5 @@
 package com.kholid.hrms.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,15 +11,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kholid.hrms.model.Department;
 import com.kholid.hrms.service.DepartmentService;
+import com.kholid.hrms.service.UserService;
 
 @Controller
 @RequestMapping("/departments")
 public class DepartmentController {
 
     private final DepartmentService departmentService;
+    private final UserService userService;
 
-    public DepartmentController(DepartmentService departmentService) {
+    public DepartmentController(DepartmentService departmentService, UserService userService) {
         this.departmentService = departmentService;
+        this.userService = userService;
     }
 
     // List all departments
@@ -34,7 +36,7 @@ public class DepartmentController {
     @GetMapping("/add")
     public String addForm(Model model) {
         model.addAttribute("department", new Department());
-        model.addAttribute("users", departmentService.getAllUsers());
+        model.addAttribute("users", userService.getAllUsers());
         return "departments/add";
     }
 
@@ -47,7 +49,7 @@ public class DepartmentController {
         String error = departmentService.saveDepartment(department, managerId);
         if (error != null) {
             model.addAttribute("errorMessage", error);
-            model.addAttribute("users", departmentService.getAllUsers());
+            model.addAttribute("users", userService.getAllUsers());
             model.addAttribute("department", department);
             return "departments/add";
         }
@@ -60,7 +62,7 @@ public class DepartmentController {
     public String editForm(@PathVariable Long id, Model model) {
         Department department = departmentService.getDepartment(id);
         model.addAttribute("department", department);
-        model.addAttribute("users", departmentService.getAllUsers());
+        model.addAttribute("users", userService.getAllUsers());
         return "departments/edit";
     }
 
@@ -73,7 +75,7 @@ public class DepartmentController {
         String error = departmentService.updateDepartment(department, managerId);
         if (error != null) {
             model.addAttribute("errorMessage", error);
-            model.addAttribute("users", departmentService.getAllUsers());
+            model.addAttribute("users", userService.getAllUsers());
             model.addAttribute("department", department);
             return "departments/edit";
         }
