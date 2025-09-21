@@ -34,7 +34,14 @@ public class UserController {
 
     // List all users
     @GetMapping("")
-    public String listUsers(Model model) {
+    public String listUsers(Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         model.addAttribute("users", userService.getAllUsers());
         return "users/list";
     }

@@ -27,7 +27,14 @@ public class DepartmentController {
 
     // List all departments
     @GetMapping("")
-    public String listDepartments(Model model) {
+    public String listDepartments(Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         model.addAttribute("departments", departmentService.getAllDepartments());
         return "departments/list";
     }
