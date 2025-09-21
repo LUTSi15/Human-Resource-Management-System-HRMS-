@@ -5,19 +5,15 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.kholid.hrms.model.Department;
-import com.kholid.hrms.model.User;
 import com.kholid.hrms.repo.DepartmentRepository;
-import com.kholid.hrms.repo.UserRepository;
 
 @Service
 public class DepartmentService {
 
     private final DepartmentRepository departmentRepository;
-    private final UserRepository userRepository;
 
-    public DepartmentService(DepartmentRepository departmentRepository, UserRepository userRepository) {
+    public DepartmentService(DepartmentRepository departmentRepository) {
         this.departmentRepository = departmentRepository;
-        this.userRepository = userRepository;
     }
 
     // List all departments
