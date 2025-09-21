@@ -2,8 +2,6 @@ package com.kholid.hrms.controller;
 
 import java.util.List;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -59,7 +57,7 @@ public class UserController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("roles", List.of("ROLE_ADMIN", "ROLE_EMPLOYEE", "ROLE_MANAGER"));
-            model.addAttribute("rolesName", List.of("Admin", "Employee", "Manager"));
+        model.addAttribute("rolesName", List.of("Admin", "Employee", "Manager"));
             model.addAttribute("departments", departmentService.getAllDepartments());
             return "users/add";
         }
@@ -70,7 +68,7 @@ public class UserController {
         } else {
             user.setDepartment(null);
         }
-        
+
         userService.saveUser(user);
         return "redirect:/users";
     }
