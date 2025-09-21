@@ -59,7 +59,14 @@ public class LeaveController {
 
     // Show add form
     @GetMapping("/form")
-    public String showLeaveForm() {
+    public String showLeaveForm(Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         return "leaves/formLeave";
     }
 
