@@ -1,5 +1,6 @@
 package com.kholid.hrms.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,14 @@ public class DepartmentController {
 
     // Show add form
     @GetMapping("/add")
-    public String addForm(Model model) {
+    public String addForm(Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         model.addAttribute("department", new Department());
         model.addAttribute("users", userService.getAllUsers());
         return "departments/add";
@@ -56,7 +64,14 @@ public class DepartmentController {
 
     // Show edit form
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
+    public String editForm(@PathVariable Long id, Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         Department department = departmentService.getDepartment(id);
         model.addAttribute("department", department);
         model.addAttribute("users", userService.getAllUsers());
