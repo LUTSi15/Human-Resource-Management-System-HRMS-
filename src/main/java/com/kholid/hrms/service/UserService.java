@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.kholid.hrms.model.Department;
@@ -30,8 +32,20 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
     }
 
+    public User getUserbyUsername(String name) {
+        return userRepository.findByUsername(name).orElse(null);
+    }
+
     public void saveUser(User user) {
+        // hash the password
+        String encodedPassword = passwordEncoder().encode(user.getPassword());
+        
+        user.setPassword(encodedPassword);
         userRepository.save(user);
+    }
+
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     public String deleteUser(Long id) {
