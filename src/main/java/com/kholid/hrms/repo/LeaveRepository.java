@@ -11,5 +11,5 @@ public interface LeaveRepository extends JpaRepository<LeaveApplication, Long> {
 
     List<LeaveApplication> findByUser(User user); // Find list of leave based on user
     
-    List<LeaveApplication> findByUser_Department_Id(Long departmentId); // Find list of leave based on department
+    List<LeaveApplication> findByUserDepartmentId(Long id); // Find list of leaves based on department
 }

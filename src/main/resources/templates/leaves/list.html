@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Leaves</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Leave List</h2>
+        <a class="btn btn-primary" th:href="@{/leaves/form}">+ Add Leave</a>
+    </div>
+
+    <!-- Display error message if exists -->
+    <div th:if="${message}" style="color: green; margin-bottom: 10px;">
+        <p th:text="${message}"></p>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Employee</th>
+                <th>Date</th>
+                <th>Reason</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="leave : ${leaves}">
+                <td th:text="${leave.user.username}"></td>
+                <td th:text="${leave.date}"></td>
+                <td th:text="${leave.leaveReason}"></td>
+                <td th:text="${leave.status}"></td>
+                <td>
+                    <div th:if="${leave.status eq 'Apply' or leave.status eq 'Appeal'}"> 
+                        <a th:href="@{'/leaves/approve/' + ${leave.id}}" class="btn btn-sm btn-success">Approve</a>
+
+                        <!-- Reject Button triggers modal -->
+                        <button type="button" class="btn btn-sm btn-danger" 
+                                data-bs-toggle="modal" 
+                                th:data-bs-target="'#rejectModal__' + ${leave.id}">
+                            Reject
+                        </button>
+                    </div>
+                    <div th:if="${ leave.status eq 'Reject'}"> 
+                        <!-- Reject Button triggers modal -->
+                        <button type="button" class="btn btn-sm btn-danger" 
+                                data-bs-toggle="modal" 
+                                th:data-bs-target="'#appealModal__' + ${leave.id}">
+                            Appeal
+                        </button>
+                    </div>
+
+
+                    <!-- Appeal Modal -->
+                    <div class="modal fade" th:id="'appealModal__' + ${leave.id}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form th:action="@{'/leaves/appeal/' + ${leave.id}}" method="post">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Appeal Leave</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="appealReason" class="form-label">Appeal Reason</label>
+                                            <textarea class="form-control" name="appealReason" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">appeal</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Reject Modal -->
+                    <div class="modal fade" th:id="'rejectModal__' + ${leave.id}" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form th:action="@{'/leaves/reject/' + ${leave.id}}" method="post">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Reject Leave</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="statusReason" class="form-label">Reason for Rejection</label>
+                                            <textarea class="form-control" name="statusReason" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</html>
