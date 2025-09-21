@@ -9,8 +9,9 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 // import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -21,10 +22,15 @@ public class SecurityConfig {
     private UserDetailsService userDetailsService;
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService); // where to load users
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());       // how to check passwords
+        provider.setUserDetailsService(userDetailsService);     // where to load users
+        provider.setPasswordEncoder(passwordEncoder());         // how to check passwords
         return provider;
     }
    
@@ -67,7 +73,7 @@ public class SecurityConfig {
                 .permitAll()
             )
             .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**")) 
-            .headers(headers -> headers.frameOptions().sameOrigin()); // allow frames
+            .headers(h -> h.frameOptions(f -> f.sameOrigin())); // allow frames
 ;
 
         return http.build();

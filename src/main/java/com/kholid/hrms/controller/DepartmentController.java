@@ -1,5 +1,6 @@
 package com.kholid.hrms.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kholid.hrms.model.Department;
 import com.kholid.hrms.service.DepartmentService;
@@ -27,14 +27,28 @@ public class DepartmentController {
 
     // List all departments
     @GetMapping("")
-    public String listDepartments(Model model) {
+    public String listDepartments(Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         model.addAttribute("departments", departmentService.getAllDepartments());
         return "departments/list";
     }
 
     // Show add form
     @GetMapping("/add")
-    public String addForm(Model model) {
+    public String addForm(Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         model.addAttribute("department", new Department());
         model.addAttribute("users", userService.getAllUsers());
         return "departments/add";
@@ -42,11 +56,9 @@ public class DepartmentController {
 
     // Handle saving new department
     @PostMapping("/add")
-    public String saveDepartment(@ModelAttribute Department department,
-                                 @RequestParam(required = false) Long managerId,
-                                 Model model) {
+    public String saveDepartment(@ModelAttribute Department department, Model model) {
 
-        String error = departmentService.saveDepartment(department, managerId);
+        String error = departmentService.saveDepartment(department);
         if (error != null) {
             model.addAttribute("errorMessage", error);
             model.addAttribute("users", userService.getAllUsers());
@@ -59,7 +71,14 @@ public class DepartmentController {
 
     // Show edit form
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable Long id, Model model) {
+    public String editForm(@PathVariable Long id, Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         Department department = departmentService.getDepartment(id);
         model.addAttribute("department", department);
         model.addAttribute("users", userService.getAllUsers());
@@ -68,11 +87,9 @@ public class DepartmentController {
 
     // Handle updating department
     @PostMapping("/edit")
-    public String updateDepartment(@ModelAttribute Department department,
-                                   @RequestParam(required = false) Long managerId,
-                                   Model model) {
+    public String updateDepartment(@ModelAttribute Department department, Model model) {
 
-        String error = departmentService.updateDepartment(department, managerId);
+        String error = departmentService.updateDepartment(department);
         if (error != null) {
             model.addAttribute("errorMessage", error);
             model.addAttribute("users", userService.getAllUsers());

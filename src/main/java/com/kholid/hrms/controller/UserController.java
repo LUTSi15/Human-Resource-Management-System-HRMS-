@@ -2,6 +2,7 @@ package com.kholid.hrms.controller;
 
 import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,14 +34,28 @@ public class UserController {
 
     // List all users
     @GetMapping("")
-    public String listUsers(Model model) {
+    public String listUsers(Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         model.addAttribute("users", userService.getAllUsers());
         return "users/list";
     }
 
     // Show add form
     @GetMapping("/add")
-    public String showAddForm(Model model) {
+    public String showAddForm(Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         model.addAttribute("user", new User());
         model.addAttribute("roles", List.of("ROLE_ADMIN", "ROLE_EMPLOYEE", "ROLE_MANAGER"));
         model.addAttribute("rolesName", List.of("Admin", "Employee", "Manager"));
@@ -75,7 +90,14 @@ public class UserController {
 
     // Show edit form
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
+    public String showEditForm(@PathVariable Long id, Model model, Authentication auth) {
+        String role = auth.getAuthorities()
+                      .stream()
+                      .findFirst()
+                      .map(granted -> granted.getAuthority())
+                      .orElse("ROLE_UNKNOWN");
+
+        model.addAttribute("role", role);
         User user = userService.getUser(id);
         model.addAttribute("user", user);
         model.addAttribute("roles", List.of("ROLE_ADMIN", "ROLE_EMPLOYEE", "ROLE_MANAGER"));
