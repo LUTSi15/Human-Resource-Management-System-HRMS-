@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kholid.hrms.model.Department;
 import com.kholid.hrms.service.DepartmentService;
@@ -42,11 +41,9 @@ public class DepartmentController {
 
     // Handle saving new department
     @PostMapping("/add")
-    public String saveDepartment(@ModelAttribute Department department,
-                                 @RequestParam(required = false) Long managerId,
-                                 Model model) {
+    public String saveDepartment(@ModelAttribute Department department, Model model) {
 
-        String error = departmentService.saveDepartment(department, managerId);
+        String error = departmentService.saveDepartment(department);
         if (error != null) {
             model.addAttribute("errorMessage", error);
             model.addAttribute("users", userService.getAllUsers());
@@ -68,11 +65,9 @@ public class DepartmentController {
 
     // Handle updating department
     @PostMapping("/edit")
-    public String updateDepartment(@ModelAttribute Department department,
-                                   @RequestParam(required = false) Long managerId,
-                                   Model model) {
+    public String updateDepartment(@ModelAttribute Department department, Model model) {
 
-        String error = departmentService.updateDepartment(department, managerId);
+        String error = departmentService.updateDepartment(department);
         if (error != null) {
             model.addAttribute("errorMessage", error);
             model.addAttribute("users", userService.getAllUsers());

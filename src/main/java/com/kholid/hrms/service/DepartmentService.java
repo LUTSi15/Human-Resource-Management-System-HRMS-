@@ -32,41 +32,14 @@ public class DepartmentService {
     }
 
     // Save new department
-    public String saveDepartment(Department department, Long managerId) {
-        if (managerId != null) {
-            User manager = userRepository.findById(managerId).orElse(null);
-            department.setManager(manager);
-
-            if (manager != null) {
-                Department existingDept = departmentRepository.findByManager(manager);
-                if (existingDept != null) {
-                    return "Manager already assigned to another department!";
-                }
-            }
-        } else {
-            department.setManager(null);
-        }
+    public String saveDepartment(Department department) {
 
         departmentRepository.save(department);
         return null; // null means no error
     }
 
     // Update existing department
-    public String updateDepartment(Department department, Long managerId) {
-        if (managerId != null) {
-            User manager = userRepository.findById(managerId).orElse(null);
-            department.setManager(manager);
-
-            if (manager != null) {
-                Department existingDept = departmentRepository.findByManager(manager);
-                Department prevDepartment = getDepartment(department.getId());
-                if (existingDept != null && !existingDept.getId().equals(prevDepartment.getId())) {
-                    return "Manager already assigned to another department!";
-                }
-            }
-        } else {
-            department.setManager(null);
-        }
+    public String updateDepartment(Department department) {
 
         departmentRepository.save(department);
         return null;

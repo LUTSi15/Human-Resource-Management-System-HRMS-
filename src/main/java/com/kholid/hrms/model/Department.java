@@ -5,8 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,11 +17,6 @@ public class Department {
 
     @Column(nullable = false, unique = true)
     private String name;
-
-    // Manager is a User
-    @OneToOne
-    @JoinColumn(name = "manager_id", nullable = true)
-    private User manager;
 
     // getters & setters
     public Long getId() { 
@@ -40,13 +33,5 @@ public class Department {
 
     public void setName(String name) { 
         this.name = name; 
-    }
-
-    public User getManager() { 
-        return manager; 
-    }
-
-    public void setManager(User manager) { 
-        this.manager = manager; 
     }
 }

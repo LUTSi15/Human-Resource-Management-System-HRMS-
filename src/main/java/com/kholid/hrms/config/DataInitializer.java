@@ -33,10 +33,6 @@ public class DataInitializer {
                 admin.setDepartment(hrDept); // assign department
                 userService.saveUser(admin);
 
-                // 3. Set manager of the department to Admin
-                hrDept.setManager(admin);
-                departmentRepository.save(hrDept);
-
                 System.out.println("Default Admin and Human Resource department created.");
             } else {
                 System.out.println("Admin user already exists. Skipping initialization.");
