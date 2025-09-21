@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Apply Leave</title>
+    <style>
+        form {
+            max-width: 400px;
+            margin: 50px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input, textarea, button {
+            padding: 8px;
+            font-size: 14px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h2 style="text-align:center;">Apply for Leave</h2>
+    
+    <form th:action="@{/leaves/apply}" method="post">
+        <div>
+            <label for="date">Leave Date:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+
+        <div>
+            <label for="leaveReason">Reason:</label>
+            <textarea id="leaveReason" name="leaveReason" rows="4" required></textarea>
+        </div>
+
+        <button type="submit">Apply Leave</button>
+    </form>
+</body>
+</html>
